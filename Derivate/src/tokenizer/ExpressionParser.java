@@ -12,7 +12,7 @@ import net.objecthunter.exp4j.tokenizer.Token;
  * Factory class for {@link Expression} instances. This class is the main API entrypoint. Users should create new
  * {@link Expression} instances using this factory class.
  */
-public class ExpressionBuilder {
+public class ExpressionParser {
 
     private final String expression;
 
@@ -28,7 +28,7 @@ public class ExpressionBuilder {
      * Create a new ExpressionBuilder instance and initialize it with a given expression string.
      * @param expression the expression to be parsed
      */
-    public ExpressionBuilder(String expression) {
+    public ExpressionParser(String expression) {
         if (expression == null || expression.trim().length() == 0) {
             throw new IllegalArgumentException("Expression can not be empty");
         }
@@ -43,7 +43,7 @@ public class ExpressionBuilder {
      * @param function the custom {@link net.objecthunter.exp4j.function.Function} implementation that should be available for use in the expression.
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder function(Function function) {
+    public ExpressionParser function(Function function) {
         this.userFunctions.put(function.getName(), function);
         return this;
     }
@@ -53,7 +53,7 @@ public class ExpressionBuilder {
      * @param functions the custom {@link net.objecthunter.exp4j.function.Function} implementations
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder functions(Function... functions) {
+    public ExpressionParser functions(Function... functions) {
         for (Function f : functions) {
             this.userFunctions.put(f.getName(), f);
         }
@@ -65,7 +65,7 @@ public class ExpressionBuilder {
      * @param functions A {@link java.util.List} of custom {@link net.objecthunter.exp4j.function.Function} implementations
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder functions(List<Function> functions) {
+    public ExpressionParser functions(List<Function> functions) {
         for (Function f : functions) {
             this.userFunctions.put(f.getName(), f);
         }
@@ -77,7 +77,7 @@ public class ExpressionBuilder {
      * @param variableNames the variables used in the expression
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder variables(Set<String> variableNames) {
+    public ExpressionParser variables(Set<String> variableNames) {
         this.variableNames.addAll(variableNames);
         return this;
     }
@@ -87,7 +87,7 @@ public class ExpressionBuilder {
      * @param variableNames the variables used in the expression
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder variables(String ... variableNames) {
+    public ExpressionParser variables(String ... variableNames) {
         Collections.addAll(this.variableNames, variableNames);
         return this;
     }
@@ -97,12 +97,12 @@ public class ExpressionBuilder {
      * @param variableName the variable used in the expression
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder variable(String variableName) {
+    public ExpressionParser variable(String variableName) {
         this.variableNames.add(variableName);
         return this;
     }
 
-    public ExpressionBuilder implicitMultiplication(boolean enabled) {
+    public ExpressionParser implicitMultiplication(boolean enabled) {
         this.implicitMultiplication = enabled;
         return this;
     }
@@ -112,7 +112,7 @@ public class ExpressionBuilder {
      * @param operator the custom {@link net.objecthunter.exp4j.operator.Operator} to add
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder operator(Operator operator) {
+    public ExpressionParser operator(Operator operator) {
         this.checkOperatorSymbol(operator);
         this.userOperators.put(operator.getSymbol(), operator);
         return this;
@@ -132,7 +132,7 @@ public class ExpressionBuilder {
      * @param operators the set of custom {@link net.objecthunter.exp4j.operator.Operator} implementations to add
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder operator(Operator... operators) {
+    public ExpressionParser operator(Operator... operators) {
         for (Operator o : operators) {
             this.operator(o);
         }
@@ -144,7 +144,7 @@ public class ExpressionBuilder {
      * @param operators the {@link java.util.List} of custom {@link net.objecthunter.exp4j.operator.Operator} implementations to add
      * @return the ExpressionBuilder instance
      */
-    public ExpressionBuilder operator(List<Operator> operators) {
+    public ExpressionParser operator(List<Operator> operators) {
         for (Operator o : operators) {
             this.operator(o);
         }

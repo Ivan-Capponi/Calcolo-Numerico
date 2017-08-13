@@ -6,14 +6,26 @@ import java.util.Iterator;
 import java.util.List;
 
 import ast.*;
-import derivation.DerivateComputation;
 import net.objecthunter.exp4j.tokenizer.*;
 
-public class Main {
+public class AbstractTreeBuilder {
+	private String f;
 	private static Iterator <Token> it = null;
-	private static Operation exp;
 	
-	private static Operation getTree()
+	public AbstractTreeBuilder(String f){
+		if (f == null) throw new IllegalArgumentException("Invalid expression");
+		this.f = f;
+		init();
+	}
+	
+	private void init(){
+		ExpressionParser expBuilder = new ExpressionParser(f);
+		List <Token> li = Arrays.asList(expBuilder.variable("x").build());
+		Collections.reverse(li);
+		it = li.iterator();
+	}
+	
+	public Operation getTree()
 	{
 		if (!it.hasNext())
 			return null;
@@ -48,27 +60,11 @@ public class Main {
 											case "/":	return new Division(left, right);
 											case "^":	return new Pow(left, right); 
 										}
+										
 			case Token.TOKEN_PARENTHESES_OPEN: return getTree();
 			case Token.TOKEN_PARENTHESES_CLOSE: return getTree();
 			case Token.TOKEN_VARIABLE: return new SimpleVar();
+			default: return null;
 		}
-		
-		return null;
 	}
-	
-	public Operation getDerivate(){
-		return exp.accept(new DerivateComputation());
-	}
-	
-	public static void main(String[] args) {
-		if (args.length != 1) throw new IllegalArgumentException("One argument required: imput an expression to evaluate");
-		
-		ExpressionBuilder expBuilder = new ExpressionBuilder(args[0]);
-		List <Token> li = Arrays.asList(expBuilder.variable("x").build());
-		Collections.reverse(li);
-		it = li.iterator();
-		exp = getTree();
-		System.out.println(exp.accept(new DerivateComputation()));
-	}
-
 }
