@@ -18,4 +18,6 @@ public interface Visitor <T> {
 	T visitPow(Operation op, Operation exp);
 	T visitConst(String c);
 	T visitSimpleVar();
+	T visitAbs(Operation op);
+	T visitExp(Operation op);
 }

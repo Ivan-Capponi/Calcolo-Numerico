@@ -1,2 +1,4 @@
-/test/
 /tokenizer/
+/test/
+/ast/
+/derivation/

@@ -31,6 +31,8 @@ public class Main {
 											case "sin": return new Sin(getTree());
 											case "sqrt": return new Sqrt(getTree());
 											case "tan": return new Tan(getTree());
+											case "exp": return new Exp(getTree());
+											case "abs": return new Abs(getTree());
 										}
 			
 			case Token.TOKEN_NUMBER:	return new Constant(""+((NumberToken)t).getValue());
@@ -66,7 +68,7 @@ public class Main {
 		Collections.reverse(li);
 		it = li.iterator();
 		exp = getTree();
-		System.out.println(exp);
+		System.out.println(exp.accept(new DerivateComputation()));
 	}
 
 }

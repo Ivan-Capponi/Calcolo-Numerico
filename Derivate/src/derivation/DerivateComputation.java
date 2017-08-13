@@ -58,7 +58,7 @@ public class DerivateComputation implements Visitor<Operation> {
 
 	@Override
 	public Operation visitSqrt(Operation op) {
-		return new Division(op.accept(this), new Product(new Constant("2"), op));
+		return new Division(op.accept(this), new Product(new Constant("2"), new Sqrt(op)));
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class DerivateComputation implements Visitor<Operation> {
 
 	@Override
 	public Operation visitPow(Operation op, Operation exp) {
-		return new Product(new Product(exp, new Pow(op, new Subtraction(exp, new Constant("1")))), op.accept(this));
+		return new Product(new Pow(op,exp), new Addition(new Product(exp.accept(this), new Log(op)), new Division(new Product(exp, op.accept(this)), op)));
 	}
 
 	@Override
@@ -79,5 +79,15 @@ public class DerivateComputation implements Visitor<Operation> {
 	@Override
 	public Operation visitSimpleVar() {
 		return new Constant("1");
+	}
+
+	@Override
+	public Operation visitAbs(Operation op) {
+		return new Division(new Product(new Abs(op), op.accept(this)), op);
+	}
+
+	@Override
+	public Operation visitExp(Operation op) {
+		return new Product(new Exp(op), op.accept(this));
 	}
 }

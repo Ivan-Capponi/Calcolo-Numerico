@@ -2,23 +2,23 @@ package ast;
 
 import derivation.Visitor;
 
-public class Sqrt extends UnaryOperation {
+public class Exp extends UnaryOperation {
 	
-	public Sqrt(Operation op) {
+	public Exp(Operation op) {
 		super(op);
 	}
 
 	@Override
 	public <T> T accept(Visitor<T> v) {
-		return v.visitSqrt(op);
+		return v.visitExp(op);
 	}
-
+	
 	public String toString(){
-		return "sqrt(" + op.toString() + ")";
+		return "(e^(" + op.toString() + "))";
  	}
 
 	@Override
 	public Double getNumericResult(Double val) {
-		return Math.sqrt(op.getNumericResult(val));
+		return Math.exp(op.getNumericResult(val));
 	}
 }
