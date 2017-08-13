@@ -18,7 +18,7 @@ public class Division extends BinaryOperation {
 	
 	@Override
 	public <T> T accept(Visitor<T> v) {
-		return v.visitAdd(left, right);
+		return v.visitDiv(left, right);
 	}
 	
 	public String toString(){

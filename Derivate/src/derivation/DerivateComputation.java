@@ -21,8 +21,8 @@ public class DerivateComputation implements Visitor<Operation> {
 
 	@Override
 	public Operation visitDiv(Operation left, Operation right) {
-		Operation numerator = new Subtraction(new Product(left.accept(this), right), new Product(left, right.accept(this)));
 		Operation denominator = new Pow(right, new Constant("2"));
+		Operation numerator = new Subtraction(new Product(left.accept(this), right), new Product(left, right.accept(this)));
 		return new Division(numerator, denominator);
 	}
 

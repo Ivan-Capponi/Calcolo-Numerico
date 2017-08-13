@@ -11,6 +11,7 @@ import net.objecthunter.exp4j.tokenizer.*;
 
 public class Main {
 	private static Iterator <Token> it = null;
+	private static Operation exp;
 	
 	private static Operation getTree()
 	{
@@ -53,6 +54,10 @@ public class Main {
 		return null;
 	}
 	
+	public Operation getDerivate(){
+		return exp.accept(new DerivateComputation());
+	}
+	
 	public static void main(String[] args) {
 		if (args.length != 1) throw new IllegalArgumentException("One argument required: imput an expression to evaluate");
 		
@@ -60,7 +65,8 @@ public class Main {
 		List <Token> li = Arrays.asList(expBuilder.variable("x").build());
 		Collections.reverse(li);
 		it = li.iterator();
-		System.out.println(getTree().accept(new DerivateComputation()).toString());
+		exp = getTree();
+		System.out.println(exp);
 	}
 
 }
