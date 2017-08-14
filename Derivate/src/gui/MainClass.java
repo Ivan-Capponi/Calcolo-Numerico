@@ -13,6 +13,7 @@ public class MainClass {
 		Operation tree = treeGenerator.getTree();
 		DirectedGraph <Operation, Operation> expressionGraph = tree.accept(new GraphComputation());
 		System.out.println(expressionGraph);
+		System.out.println("test");
 		}
 
 }
