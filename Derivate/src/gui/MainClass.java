@@ -1,5 +1,7 @@
 package gui;
-import org.jgrapht.graph.DefaultDirectedGraph;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.view.Viewer;
 
 import ast.*;
 import tokenizer.AbstractTreeBuilder;
@@ -8,12 +10,17 @@ import tokenizer.GraphComputation;
 public class MainClass {
 
 	public static void main(String[] args) {
-		AbstractTreeBuilder treeGenerator = new AbstractTreeBuilder("log(2x+5)");
+		AbstractTreeBuilder treeGenerator = new AbstractTreeBuilder("tan((7+x)*(sqrt(x)))");
 		Operation tree = treeGenerator.getTree();
-		DefaultDirectedGraph <String, String> expressionGraph = new DefaultDirectedGraph <String, String>(String.class);
-		GraphComputation comp = new GraphComputation(expressionGraph);
+		Graph graph = new SingleGraph("Numerical Analysis");
+		GraphComputation comp = new GraphComputation(graph);
 		try { tree.accept(comp); } catch (Exception e) { e.printStackTrace();}
-		System.out.println(expressionGraph);
+		graph.addAttribute("ui.quality: 4");
+		graph.addAttribute("ui.antialias");
+		graph.addAttribute("ui.stylesheet", "node { fill-mode: dyn-plain; fill-color: yellow; stroke-mode: plain; stroke-color: black; size: 50px; text-alignment: above; text-size: 15; }");
+		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+		Viewer view = graph.display();
+		view.enableAutoLayout();
 	}
 
 }
