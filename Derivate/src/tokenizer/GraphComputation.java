@@ -1,174 +1,159 @@
 package tokenizer;
 
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.graph.DefaultDirectedGraph;
 
 import ast.*;
 import derivation.DerivateComputation;
 import derivation.Visitor;
 
-public class GraphComputation implements Visitor <DirectedGraph <Operation, Operation>> {
-	DirectedGraph<Operation, Operation> graph = new DefaultDirectedGraph<Operation, Operation>(Operation.class);
-	private DerivateComputation derivator = new DerivateComputation();
+public class GraphComputation implements Visitor <Operation> {
+
+	private DirectedGraph <String, String> graph;
+	private DerivateComputation derivation = new DerivateComputation();
+	private SimpleVar x = new SimpleVar();
 	
-	public GraphComputation()
-	{
-		graph.addVertex(new SimpleVar());
+	public GraphComputation(DirectedGraph <String, String> graph){
+		if (graph == null) throw new IllegalArgumentException("Invalid graph");
+		this.graph = graph;
+		graph.addVertex(x.toString());
 	}
 	
 	@Override
-	public DirectedGraph <Operation, Operation> visitAdd(Operation left, Operation right) {
-		Operation add = new Addition(left, right);
-		graph.addVertex(add);
-		graph.addEdge(left, add, new Division(left,add));
-		graph.addEdge(right, add, new Division(right,add));
-		left.accept(this);
-		right.accept(this);
-		return graph;
+	public Operation visitAdd(Operation left, Operation right) {
+		Addition add = new Addition(left.accept(this), right.accept(this));
+		graph.addVertex(add.toString());
+		graph.addEdge(left.toString(), add.toString(), new Division(left,add).toString());
+		graph.addEdge(right.toString(), add.toString(), new Division(right,add).toString());
+		return add;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitSub(Operation left, Operation right) {
-		Operation sub = new Subtraction(left, right);
-		graph.addVertex(sub);
-		graph.addEdge(left, sub, new Division(left,sub));
-		graph.addEdge(right, sub, new Negate(new Division(right,sub)));
-		left.accept(this);
-		right.accept(this);
-		return graph;
+	public Operation visitSub(Operation left, Operation right) {
+		Subtraction sub = new Subtraction(left.accept(this), right.accept(this));
+		graph.addVertex(sub.toString());
+		graph.addEdge(left.toString(), sub.toString(), new Division(left,sub).toString());
+		graph.addEdge(right.toString(), sub.toString(), new Negate(new Division(right,sub)).toString());
+		return sub;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitMul(Operation left, Operation right) {
-		Operation prod = new Product(left, right);
-		graph.addVertex(prod);
-		graph.addEdge(left, prod, new Constant("1"));
-		graph.addEdge(right, prod, new Constant("1"));
-		left.accept(this);
-		right.accept(this);
-		return graph;
+	public Operation visitMul(Operation left, Operation right) {
+		Product prod = new Product(left.accept(this), right.accept(this));
+		graph.addVertex(prod.toString());
+		graph.addEdge(left.toString(), prod.toString(), new Constant("1").toString());
+		graph.addEdge(right.toString(), prod.toString(), new Constant("1").toString());
+		return prod;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitDiv(Operation left, Operation right) {
-		Operation div = new Division(left, right);
-		graph.addVertex(div);
-		graph.addEdge(left, div, new Constant("1"));
-		graph.addEdge(right, div, new Constant("-1"));
-		left.accept(this);
-		right.accept(this);
-		return graph;
+	public Operation visitDiv(Operation left, Operation right) {
+		Division div = new Division(left.accept(this), right.accept(this));
+		graph.addVertex(div.toString());
+		graph.addEdge(left.toString(), div.toString(), new Constant("1").toString());
+		graph.addEdge(right.toString(), div.toString(), new Constant("-1").toString());
+		return div;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitSin(Operation op) {
-		Operation sin = new Sin(op);
-		graph.addVertex(sin);
-		graph.addEdge(op, sin, new Division(new Product(new SimpleVar(), sin.accept(derivator)),sin));
-		op.accept(this);
-		return graph;
+	public Operation visitSin(Operation op) {
+		Sin sin = new Sin(op.accept(this));
+		graph.addVertex(sin.toString());
+		graph.addEdge(op.toString(), sin.toString(), sin.accept(derivation).toString());
+		return sin;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitCos(Operation op) {
-		Operation cos = new Cos(op);
-		graph.addVertex(cos);
-		graph.addEdge(op, cos, new Division(new Product(new SimpleVar(), cos.accept(derivator)),cos));
-		op.accept(this);
-		return graph;
+	public Operation visitCos(Operation op) {
+		Cos cos = new Cos(op.accept(this));
+		graph.addVertex(cos.toString());
+		graph.addEdge(op.toString(), cos.toString(), cos.accept(derivation).toString());
+		return cos;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitTan(Operation op) {
-		Operation tan = new Tan(op);
-		graph.addVertex(tan);
-		graph.addEdge(op, tan, new Division(new Product(new SimpleVar(), tan.accept(derivator)),tan));
-		op.accept(this);
-		return graph;
+	public Operation visitTan(Operation op) {
+		Tan cos = new Tan(op.accept(this));
+		graph.addVertex(cos.toString());
+		graph.addEdge(op.toString(), cos.toString(), cos.accept(derivation).toString());
+		return cos;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitAtan(Operation op) {
-		Operation atan = new Atan(op);
-		graph.addVertex(atan);
-		graph.addEdge(op, atan, new Division(new Product(new SimpleVar(), atan.accept(derivator)),atan));
-		op.accept(this);
-		return graph;
+	public Operation visitAtan(Operation op) {
+		Atan cos = new Atan(op.accept(this));
+		graph.addVertex(cos.toString());
+		graph.addEdge(op.toString(), cos.toString(), cos.accept(derivation).toString());
+		return cos;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitAcos(Operation op) {
-		Operation acos = new Acos(op);
-		graph.addVertex(acos);
-		graph.addEdge(op, acos, new Division(new Product(new SimpleVar(), acos.accept(derivator)),acos));
-		op.accept(this);
-		return graph;
+	public Operation visitAcos(Operation op) {
+		Acos cos = new Acos(op.accept(this));
+		graph.addVertex(cos.toString());
+		graph.addEdge(op.toString(), cos.toString(), cos.accept(derivation).toString());
+		return cos;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitAsin(Operation op) {
-		Operation asin = new Asin(op);
-		graph.addVertex(asin);
-		graph.addEdge(op, asin, new Division(new Product(new SimpleVar(), asin.accept(derivator)),asin));
-		op.accept(this);
-		return graph;
+	public Operation visitAsin(Operation op) {
+		Asin cos = new Asin(op.accept(this));
+		graph.addVertex(cos.toString());
+		graph.addEdge(op.toString(), cos.toString(), cos.accept(derivation).toString());
+		return cos;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitSqrt(Operation op) {
-		Operation sqrt = new Sqrt(op);
-		graph.addVertex(sqrt);
-		graph.addEdge(op, sqrt, new Division(new Product(new SimpleVar(), sqrt.accept(derivator)),sqrt));
-		op.accept(this);
-		return graph;
+	public Operation visitSqrt(Operation op) {
+		Sqrt cos = new Sqrt(op.accept(this));
+		graph.addVertex(cos.toString());
+		graph.addEdge(op.toString(), cos.toString(), cos.accept(derivation).toString());
+		return cos;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitLog(Operation op) {
-		Operation log = new Log(op);
-		graph.addVertex(log);
-		graph.addEdge(op, log, new Division(new Product(new SimpleVar(), log.accept(derivator)),log));
-		op.accept(this);
-		return graph;
+	public Operation visitLog(Operation op) {
+		Log cos = new Log(op.accept(this));
+		graph.addVertex(cos.toString());
+		graph.addEdge(op.toString(), cos.toString(), cos.accept(derivation).toString());
+		return cos;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitPow(Operation op, Operation exp) {
-		exp.accept(this);
-		Operation pow = new Pow(op, exp);
-		graph.addVertex(pow);
-		graph.addEdge(op, pow, new Constant("1"));
-		op.accept(this);
-		return graph;
+	public Operation visitPow(Operation op, Operation exp) {
+		Pow prod = new Pow(op.accept(this), exp.accept(this));
+		graph.addVertex(prod.toString());
+		graph.addEdge(op.toString(), prod.toString(), new Constant("1").toString());
+		graph.addEdge(exp.toString(), prod.toString(), new Constant("1").toString());
+		return prod;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitConst(String c) {
-		graph.addVertex(new Constant(c));
-		return graph;
+	public Operation visitConst(String c) {
+		Constant constant = new Constant(c);
+		graph.addVertex(constant.toString());	
+		return constant;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitSimpleVar() {
-		return graph;
+	public Operation visitSimpleVar() {
+		return x;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitAbs(Operation op) {
-		Operation abs = new Abs(op);
-		graph.addVertex(abs);
-		graph.addEdge(op, abs, new Constant("1"));
-		op.accept(this);
-		return graph;
+	public Operation visitAbs(Operation op) {
+		Abs cos = new Abs(op.accept(this));
+		graph.addVertex(cos.toString());
+		graph.addEdge(op.toString(), cos.toString(), cos.accept(derivation).toString());
+		return cos;
 	}
 
 	@Override
-	public DirectedGraph <Operation, Operation> visitExp(Operation op) {
-		Operation exp = new Exp(op);
-		graph.addVertex(exp);
-		graph.addEdge(op, exp, new Constant("1"));
-		op.accept(this);
-		return graph;
+	public Operation visitExp(Operation op) {
+		Exp cos = new Exp(op.accept(this));
+		graph.addVertex(cos.toString());
+		graph.addEdge(op.toString(), cos.toString(), cos.accept(derivation).toString());
+		return cos;
 	}
+
 
 }

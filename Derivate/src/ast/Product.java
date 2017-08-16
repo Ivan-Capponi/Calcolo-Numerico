@@ -24,6 +24,16 @@ public class Product extends BinaryOperation {
 	public String toString(){
 		return "(" + left.toString() + ")*(" + right.toString() + ")";
 	}
+	
+	public boolean equals(Object o){
+		if (this == o) return true;
+		
+		if (!(o instanceof Product))
+			return false;
+		
+		Product add = (Product) o;
+		return (add.left == left && add.right == right);
+	}
 
 	@Override
 	public Double getNumericResult(Double val) {

@@ -26,6 +26,16 @@ public class Addition extends BinaryOperation {
 		return "(" + left.toString() + ")+(" + right.toString() + ")";
 	}
 	
+	public boolean equals(Object o){
+		if (this == o) return true;
+		
+		if (!(o instanceof Addition))
+			return false;
+		
+		Addition add = (Addition) o;
+		return (add.left == left && add.right == right);
+	}
+	
 	public Double getNumericResult(Double val)
 	{
 		return left.getNumericResult(val) + right.getNumericResult(val);
