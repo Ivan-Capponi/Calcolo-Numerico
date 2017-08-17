@@ -10,11 +10,11 @@ import tokenizer.GraphComputation;
 public class MainClass {
 
 	public static void main(String[] args) {
-		AbstractTreeBuilder treeGenerator = new AbstractTreeBuilder("tan((7+x)*(sqrt(x)))");
+		AbstractTreeBuilder treeGenerator = new AbstractTreeBuilder("(4+x^2)/(4-x^2)-(4-x^2)/(4+x^2)");
 		Operation tree = treeGenerator.getTree();
 		Graph graph = new SingleGraph("Numerical Analysis");
 		GraphComputation comp = new GraphComputation(graph);
-		try { tree.accept(comp); } catch (Exception e) { e.printStackTrace();}
+		try { tree.accept(comp); } catch (Exception e) { e.printStackTrace(); }
 		graph.addAttribute("ui.quality: 4");
 		graph.addAttribute("ui.antialias");
 		graph.addAttribute("ui.stylesheet", "node { fill-mode: dyn-plain; fill-color: yellow; stroke-mode: plain; stroke-color: black; size: 50px; text-alignment: above; text-size: 15; }");
