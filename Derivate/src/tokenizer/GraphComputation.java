@@ -21,6 +21,10 @@ public class GraphComputation implements Visitor <Operation> {
 	public GraphComputation(Graph graph){
 		if (graph == null) throw new IllegalArgumentException("Invalid graph");
 		this.graph = graph;
+		init();
+	}
+	
+	private void init(){
 		Node added = graph.addNode(x.toString());
 		added.addAttribute("ui.label", x.toString());
 		added.addAttribute("ui.color", Color.CYAN);
@@ -62,79 +66,117 @@ public class GraphComputation implements Visitor <Operation> {
 	@Override
 	public Operation visitMul(Operation left, Operation right) {
 		Product add = new Product(left.accept(this), right.accept(this));
-		Node added = graph.addNode(add.toString());
-		added.addAttribute("ui.label", add.toString());
-		Edge e1 = graph.addEdge("" + id.incrementAndGet(), left.toString(), add.toString(), true);
-		Edge e2 = graph.addEdge("" + id.incrementAndGet(), right.toString(), add.toString(), true);
-		e1.setAttribute("Operation", new Constant("1"));
-		e2.setAttribute("Operation", new Constant("1"));
-		return add;
+		try
+		{
+			Node added = graph.addNode(add.toString());
+			added.addAttribute("ui.label", add.toString());
+			Edge e1 = graph.addEdge("" + id.incrementAndGet(), left.toString(), add.toString(), true);
+			Edge e2 = graph.addEdge("" + id.incrementAndGet(), right.toString(), add.toString(), true);
+			e1.setAttribute("Operation", new Constant("1"));
+			e2.setAttribute("Operation", new Constant("1"));
+			return add;
+		}
+		catch (Exception e) { return add; }
 	}
 
 	@Override
 	public Operation visitDiv(Operation left, Operation right) {
 		Division add = new Division(left.accept(this), right.accept(this));
-		Node added = graph.addNode(add.toString());
-		added.addAttribute("ui.label", add.toString());
-		Edge e1 = graph.addEdge("" + id.incrementAndGet(), left.toString(), add.toString(), true);
-		Edge e2 = graph.addEdge("" + id.incrementAndGet(), right.toString(), add.toString(), true);
-		e1.setAttribute("Operation", new Constant("1"));
-		e2.setAttribute("Operation", new Constant("-1"));
-		return add;
+		try
+		{
+			Node added = graph.addNode(add.toString());
+			added.addAttribute("ui.label", add.toString());
+			Edge e1 = graph.addEdge("" + id.incrementAndGet(), left.toString(), add.toString(), true);
+			Edge e2 = graph.addEdge("" + id.incrementAndGet(), right.toString(), add.toString(), true);
+			e1.setAttribute("Operation", new Constant("1"));
+			e2.setAttribute("Operation", new Constant("-1"));
+			return add;
+		}
+		catch (Exception e) { return add; }
 	}
 
 	@Override
 	public Operation visitSin(Operation op) {
 		Sin sin = new Sin(op.accept(this));
-		Node added = graph.addNode(sin.toString());
-		added.addAttribute("ui.label", sin.toString());
-		graph.addEdge("" + id.incrementAndGet(), op.toString(), sin.toString(), true);
-		return sin;
+		try
+		{
+			Node added = graph.addNode(sin.toString());
+			added.addAttribute("ui.label", sin.toString());
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), sin.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), sin.accept(derivation)), sin));
+			return sin;
+		}
+		catch (Exception e) { return sin; }
 	}
 
 	@Override
 	public Operation visitCos(Operation op) {
 		Cos cos = new Cos(op.accept(this));
-		Node added = graph.addNode(cos.toString());
-		added.addAttribute("ui.label", cos.toString());
-		graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
-		return cos;
+		try
+		{
+			Node added = graph.addNode(cos.toString());
+			added.addAttribute("ui.label", cos.toString());
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), cos.accept(derivation)), cos));
+			return cos;
+		}
+		catch (Exception e) { return cos; }
 	}
 
 	@Override
 	public Operation visitTan(Operation op) {
 		Tan cos = new Tan(op.accept(this));
-		Node added = graph.addNode(cos.toString());
-		added.addAttribute("ui.label", cos.toString());
-		graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
-		return cos;
+		try
+		{
+			Node added = graph.addNode(cos.toString());
+			added.addAttribute("ui.label", cos.toString());
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), cos.accept(derivation)), cos));
+			return cos;
+		}
+		catch (Exception e) { return cos; }
 	}
 
 	@Override
 	public Operation visitAtan(Operation op) {
 		Atan cos = new Atan(op.accept(this));
-		Node added = graph.addNode(cos.toString());
-		added.addAttribute("ui.label", cos.toString());
-		graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
-		return cos;
+		try
+		{
+			Node added = graph.addNode(cos.toString());
+			added.addAttribute("ui.label", cos.toString());
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), cos.accept(derivation)), cos));
+			return cos;
+		}
+		catch (Exception e) { return cos; }
 	}
 
 	@Override
 	public Operation visitAcos(Operation op) {
 		Acos cos = new Acos(op.accept(this));
-		Node added = graph.addNode(cos.toString());
-		added.addAttribute("ui.label", cos.toString());
-		graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
-		return cos;
+		try
+		{
+			Node added = graph.addNode(cos.toString());
+			added.addAttribute("ui.label", cos.toString());
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), cos.accept(derivation)), cos));
+			return cos;
+		}
+		catch (Exception e) { return cos; }
 	}
 
 	@Override
 	public Operation visitAsin(Operation op) {
 		Asin cos = new Asin(op.accept(this));
-		Node added = graph.addNode(cos.toString());
-		added.addAttribute("ui.label", cos.toString());
-		graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
-		return cos;
+		try
+		{
+			Node added = graph.addNode(cos.toString());
+			added.addAttribute("ui.label", cos.toString());
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), cos.accept(derivation)), cos));
+			return cos;
+		}
+		catch (Exception e) { return cos; }
 	}
 
 	@Override
@@ -144,7 +186,8 @@ public class GraphComputation implements Visitor <Operation> {
 		{
 			Node added = graph.addNode(cos.toString());
 			added.addAttribute("ui.label", cos.toString());
-			graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), cos.accept(derivation)), cos));
 			return cos;
 		}
 		catch (Exception e) { return cos; }
@@ -153,10 +196,15 @@ public class GraphComputation implements Visitor <Operation> {
 	@Override
 	public Operation visitLog(Operation op) {
 		Log cos = new Log(op.accept(this));
-		Node added = graph.addNode(cos.toString());
-		added.addAttribute("ui.label", cos.toString());
-		graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
-		return cos;
+		try
+		{
+			Node added = graph.addNode(cos.toString());
+			added.addAttribute("ui.label", cos.toString());
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), cos.accept(derivation)), cos));
+			return cos;
+		}
+		catch (Exception e) { return cos; }
 	}
 
 	@Override
@@ -174,6 +222,34 @@ public class GraphComputation implements Visitor <Operation> {
 		}
 		catch (Exception e) { return add; }
 	}
+	
+	@Override
+	public Operation visitAbs(Operation op) {
+		Abs cos = new Abs(op.accept(this));
+		try
+		{
+			Node added = graph.addNode(cos.toString());
+			added.addAttribute("ui.label", cos.toString());
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), cos.accept(derivation)), cos));
+			return cos;
+		}
+		catch (Exception e) { return cos; }
+	}
+
+	@Override
+	public Operation visitExp(Operation op) {
+		Exp cos = new Exp(op.accept(this));
+		try
+		{
+			Node added = graph.addNode(cos.toString());
+			added.addAttribute("ui.label", cos.toString());
+			Edge e = graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
+			e.setAttribute("Operation", new Division(new Product(new SimpleVar(), cos.accept(derivation)), cos));
+			return cos;
+		}
+		catch (Exception e) { return cos; }
+	}
 
 	@Override
 	public Operation visitConst(String c) {
@@ -189,23 +265,5 @@ public class GraphComputation implements Visitor <Operation> {
 	@Override
 	public Operation visitSimpleVar() {
 		return x;
-	}
-
-	@Override
-	public Operation visitAbs(Operation op) {
-		Abs cos = new Abs(op.accept(this));
-		Node added = graph.addNode(cos.toString());
-		added.addAttribute("ui.label", cos.toString());
-		graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
-		return cos;
-	}
-
-	@Override
-	public Operation visitExp(Operation op) {
-		Exp cos = new Exp(op.accept(this));
-		Node added = graph.addNode(cos.toString());
-		added.addAttribute("ui.label", cos.toString());
-		graph.addEdge("" + id.incrementAndGet(), op.toString(), cos.toString(), true);
-		return cos;
 	}
 }
