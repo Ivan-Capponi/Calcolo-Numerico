@@ -21,6 +21,15 @@ public class EvalStability {
 		while (it.hasNext()){
 			Edge e = it.next();
 			Operation op = e.getAttribute("Operation");
+			op.getClass();
 		}
+	}
+	
+	public Double getVal(){
+		return val;
+	}
+	
+	public Graph getGraph(){
+		return graph;
 	}
 }

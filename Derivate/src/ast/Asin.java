@@ -21,4 +21,17 @@ public class Asin extends UnaryOperation {
 	public Double getNumericResult(Double val) {
 		return Math.asin(op.getNumericResult(val));
 	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof Asin)) return false;
+		Asin abs = (Asin) o;
+		return (op.equals(abs.op));
+	}
+	
+	public int hashCode(){
+		return 13 * op.hashCode();
+	}
 }

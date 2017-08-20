@@ -10,7 +10,7 @@ import tokenizer.GraphComputation;
 public class MainClass {
 
 	public static void main(String[] args) {
-		AbstractTreeBuilder treeGenerator = new AbstractTreeBuilder("(2+x)/(2-x)-(4+x)/(4-x^2)");
+		AbstractTreeBuilder treeGenerator = new AbstractTreeBuilder("(sqrt(3x+8))/(x+3)");
 		Operation tree = treeGenerator.getTree();
 		Graph graph = new SingleGraph("Numerical Analysis");
 		GraphComputation comp = new GraphComputation(graph);

@@ -29,4 +29,17 @@ public class Subtraction extends BinaryOperation {
 	public Double getNumericResult(Double val) {
 		return left.getNumericResult(val) - right.getNumericResult(val);
 	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof Subtraction)) return false;
+		Subtraction abs = (Subtraction) o;
+		return (left.equals(abs.left) && right.equals(abs.right));
+	}
+	
+	public int hashCode(){
+		return 79 * (left.hashCode() + right.hashCode());
+	}
 }

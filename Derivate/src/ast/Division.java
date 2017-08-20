@@ -29,4 +29,17 @@ public class Division extends BinaryOperation {
 	public Double getNumericResult(Double val) {
 		return left.getNumericResult(val) / right.getNumericResult(val);
 	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (!(o instanceof Division)) return false;
+		Division abs = (Division) o;
+		return (left.equals(abs.left) && right.equals(abs.right));
+	}
+	
+	public int hashCode(){
+		return 67 * (left.hashCode() + right.hashCode());
+	}
 }

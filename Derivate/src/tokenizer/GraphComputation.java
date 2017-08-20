@@ -28,6 +28,8 @@ public class GraphComputation implements Visitor <Operation> {
 		Node added = graph.addNode(x.toString());
 		added.addAttribute("ui.label", x.toString());
 		added.addAttribute("ui.color", Color.CYAN);
+		added.setAttribute("x", 1);
+		added.setAttribute("y", 50);
 	}
 	
 	
