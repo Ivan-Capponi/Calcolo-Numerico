@@ -6,10 +6,11 @@ import org.graphstream.ui.view.Viewer;
 import ast.*;
 import tokenizer.AbstractTreeBuilder;
 import tokenizer.GraphComputation;
+import tokenizer.TokenizerException;
 
 public class MainClass {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws TokenizerException {
 		AbstractTreeBuilder treeGenerator = new AbstractTreeBuilder("(sqrt(3x+8))/(x+3)");
 		Operation tree = treeGenerator.getTree();
 		Graph graph = new SingleGraph("Numerical Analysis");

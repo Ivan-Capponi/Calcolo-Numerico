@@ -25,11 +25,8 @@ public class AbstractTreeBuilder {
 		it = li.iterator();
 	}
 	
-	public Operation getTree()
+	public Operation getTree() throws TokenizerException
 	{
-		if (!it.hasNext())
-			return null;
-		
 		Token t = it.next();
 		
 		switch (t.getType()){
@@ -64,7 +61,7 @@ public class AbstractTreeBuilder {
 			case Token.TOKEN_PARENTHESES_OPEN: return getTree();
 			case Token.TOKEN_PARENTHESES_CLOSE: return getTree();
 			case Token.TOKEN_VARIABLE: return new SimpleVar();
-			default: return null;
+			default: throw new TokenizerException("Invalid expression");
 		}
 	}
 }
