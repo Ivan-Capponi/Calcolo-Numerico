@@ -32,7 +32,6 @@ public class GraphComputation implements Visitor <Operation> {
 		added.setAttribute("y", 50);
 	}
 	
-	
 	@Override
 	public Operation visitAdd(Operation left, Operation right) {
 		Addition add = new Addition(left.accept(this), right.accept(this));
@@ -259,6 +258,7 @@ public class GraphComputation implements Visitor <Operation> {
 		try {
 			Node added = graph.addNode(constant.toString());
 			added.addAttribute("ui.label", constant.toString());
+			added.addAttribute("ui.color", Color.CYAN);
 			return constant;
 		}
 		catch (Exception e) { return constant; }

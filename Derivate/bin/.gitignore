@@ -1,5 +1,2 @@
-/ast/
-/derivation/
-/gui/
 /matlab_runtime_interface/
-/tokenizer/
+/gui/
