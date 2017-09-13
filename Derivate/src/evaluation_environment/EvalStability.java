@@ -1,4 +1,4 @@
-package matlab_runtime_interface;
+package evaluation_environment;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -41,18 +41,21 @@ public class EvalStability {
 					
 					if ((int) limitVal == Integer.MAX_VALUE)
 					{
+						e.addAttribute("ui.style", "fill-color: red;");
 						target.setAttribute("ui.color", Color.RED);
-						target.setAttribute("ui.label", "INF");
+						//target.setAttribute("ui.label", "INF");
 						break;
 					}
 					target.setAttribute("ui.color", Color.GREEN);
-					target.setAttribute("ui.label", df.format(limitVal));
+					//target.setAttribute("ui.label", df.format(limitVal));
+					e.addAttribute("ui.style", "fill-color: green;");
 				}
 				else
 				{
 					Node target = e.getTargetNode();
+					e.addAttribute("ui.style", "fill-color: red;");
 					target.setAttribute("ui.color", Color.RED);
-					target.setAttribute("ui.label", l.rightLimit());
+					//target.setAttribute("ui.label", l.rightLimit());
 				}
 			}
 		}
