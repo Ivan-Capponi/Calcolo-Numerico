@@ -3,6 +3,8 @@ package evaluation_environment;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
+import com.mathworks.engine.EngineException;
+
 import ast.Operation;
 import org.graphstream.graph.Edge;
 
@@ -23,18 +25,21 @@ public class EvalStability {
 		df.setRoundingMode(RoundingMode.CEILING);
 	}
 	
-	public void eval(){
+	public void eval() throws EngineException{
 		Iterator <Edge> it = graph.getEdgeIterator();
+		LimitMatlab l = new LimitMatlab();
 		
 		while (it.hasNext()){
 			Edge e = it.next();
 			Operation op = e.getAttribute("Operation");
+			System.out.println("OP: " + op.toString());
 			
 			if (op != null && e.getTargetNode().getAttribute("ui.color") != null && e.getTargetNode().getAttribute("ui.color") == Color.RED)
 				continue;
 			
 			if (op != null){
-				Limit l = new Limit(op, val);
+				//Limit l = new Limit(op, val);
+				l.setValue(op, val);
 				if (l.exists()){
 					double limitVal = l.getLimit();
 					Node target = e.getTargetNode();
@@ -59,6 +64,8 @@ public class EvalStability {
 				}
 			}
 		}
+		
+		l.close();
 	}
 	
 	public Double getVal(){

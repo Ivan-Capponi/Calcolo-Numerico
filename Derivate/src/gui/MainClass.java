@@ -4,6 +4,8 @@ import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 
+import com.mathworks.engine.EngineException;
+
 import ast.*;
 import evaluation_environment.EvalStability;
 import tokenizer.AbstractTreeBuilder;
@@ -12,7 +14,7 @@ import tokenizer.TokenizerException;
 
 public class MainClass {
 
-	public static void main(String[] args) throws TokenizerException, InterruptedException {
+	public static void main(String[] args) throws TokenizerException, InterruptedException, EngineException {
 		AbstractTreeBuilder treeGenerator = new AbstractTreeBuilder("cos(2x)-(cos(x))^2");
 		Operation tree = treeGenerator.getTree();
 		Graph graph = new SingleGraph("Numerical Analysis");
@@ -25,7 +27,6 @@ public class MainClass {
 		Viewer view = graph.display();
 		View v = view.getDefaultView();
 		v.getCamera().setAutoFitView(true);	
-		Thread.sleep(5000);
 		EvalStability eval = new EvalStability(graph, 0d);
 		eval.eval();
 	}
