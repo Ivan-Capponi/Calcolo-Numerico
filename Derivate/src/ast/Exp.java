@@ -14,7 +14,7 @@ public class Exp extends UnaryOperation {
 	}
 	
 	public String toString(){
-		return "(e^(" + op.toString() + "))";
+		return "(exp(" + op.toString() + "))";
  	}
 
 	@Override

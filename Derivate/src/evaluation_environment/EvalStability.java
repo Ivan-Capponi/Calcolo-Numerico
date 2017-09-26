@@ -12,11 +12,14 @@ import java.awt.Color;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EvalStability {
 	private Graph graph;
 	private Double val;
 	private DecimalFormat df = new DecimalFormat("#.####");
+	private List <Operation> nonStable = new LinkedList <Operation>();
 	
 	public EvalStability(Graph graph, Double val){
 		if (graph == null || val == null) throw new IllegalArgumentException("Invalid graph or value");
@@ -34,8 +37,8 @@ public class EvalStability {
 			Operation op = e.getAttribute("Operation");
 			System.out.println("OP: " + op.toString());
 			
-			if (op != null && e.getTargetNode().getAttribute("ui.color") != null && e.getTargetNode().getAttribute("ui.color") == Color.RED)
-				continue;
+			//if (op != null && e.getTargetNode().getAttribute("ui.color") != null && e.getTargetNode().getAttribute("ui.color") == Color.RED)
+				//continue;
 			
 			if (op != null){
 				//Limit l = new Limit(op, val);
@@ -48,11 +51,11 @@ public class EvalStability {
 					{
 						e.addAttribute("ui.style", "fill-color: red;");
 						target.setAttribute("ui.color", Color.RED);
-						//target.setAttribute("ui.label", "INF");
-						break;
+						if(!e.getSourceNode().getAttribute("ui.color").equals(Color.CYAN))
+							nonStable.add(op);
+						continue;
 					}
 					target.setAttribute("ui.color", Color.GREEN);
-					//target.setAttribute("ui.label", df.format(limitVal));
 					e.addAttribute("ui.style", "fill-color: green;");
 				}
 				else
@@ -60,7 +63,8 @@ public class EvalStability {
 					Node target = e.getTargetNode();
 					e.addAttribute("ui.style", "fill-color: red;");
 					target.setAttribute("ui.color", Color.RED);
-					//target.setAttribute("ui.label", l.rightLimit());
+					if(!e.getSourceNode().getAttribute("ui.color").equals(Color.CYAN))
+						nonStable.add(op);
 				}
 			}
 		}
@@ -74,5 +78,9 @@ public class EvalStability {
 	
 	public Graph getGraph(){
 		return graph;
+	}
+	
+	public List<Operation> getUnstable(){
+		return nonStable;
 	}
 }

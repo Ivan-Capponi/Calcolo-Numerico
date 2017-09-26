@@ -42,7 +42,7 @@ public class LimitMatlab {
 		try {
 			eng.eval("syms x h;", null, null);
 			eng.eval("f = " + op, null, null);
-			eng.eval("limit(f,x," + value + ",'left')", writer, null);
+			eng.eval("double(limit(f,x," + value + ",'left'))", writer, null);
 		}
 		catch (Exception e) {System.err.println("Matlab error:\n"); e.printStackTrace(); }
 		String result = writer.toString().split("=")[1].trim();
@@ -57,7 +57,7 @@ public class LimitMatlab {
 		try {
 			eng.eval("syms x h;", null, null);
 			eng.eval("f = " + op, null, null);
-			eng.eval("limit(f,x," + value + ",'right')", writer, null);
+			eng.eval("double(limit(f,x," + value + ",'right'))", writer, null);
 		}
 		catch (Exception e) {System.err.println("Matlab error:\n"); e.printStackTrace(); } 
 		String result = writer.toString().split("=")[1].trim();

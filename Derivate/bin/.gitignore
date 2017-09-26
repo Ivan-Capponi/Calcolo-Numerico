@@ -1,2 +1,5 @@
+/ast/
+/derivation/
 /evaluation_environment/
 /gui/
+/tokenizer/
