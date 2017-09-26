@@ -11,6 +11,8 @@ public class LimitMatlab {
 	private Operation op;
 	private Double value;
 	private MatlabEngine eng;
+	private boolean ready = false;
+	
 	public LimitMatlab(Operation op, Double value)
 	{
 		if (op == null || value == null) throw new IllegalArgumentException("Invalid operation or tending value");
@@ -80,5 +82,9 @@ public class LimitMatlab {
 
 	public void close() throws EngineException {
 		eng.close();
+	}
+	
+	public boolean isReady(){
+		return ready;
 	}
 }
