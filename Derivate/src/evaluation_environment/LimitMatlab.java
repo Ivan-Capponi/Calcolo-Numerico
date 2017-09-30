@@ -7,11 +7,10 @@ import com.mathworks.engine.MatlabEngine;
 
 import ast.Operation;
 
-public class LimitMatlab {
+public class LimitMatlab implements LimitInterface{
 	private Operation op;
 	private Double value;
 	private MatlabEngine eng;
-	private boolean ready = false;
 	
 	public LimitMatlab(Operation op, Double value)
 	{
@@ -44,7 +43,10 @@ public class LimitMatlab {
 		try {
 			eng.eval("syms x h;", null, null);
 			eng.eval("f = " + op, null, null);
-			eng.eval("double(limit(f,x," + value + ",'left'))", writer, null);
+			if (!value.equals(Double.POSITIVE_INFINITY) && !value.equals(Double.NEGATIVE_INFINITY))
+				eng.eval("double(limit(f,x," + value + ",'left'))", writer, null);
+			else
+				throw new IllegalStateException("Could not evaluate right hand limit for INF value");
 		}
 		catch (Exception e) {System.err.println("Matlab error:\n"); e.printStackTrace(); }
 		String result = writer.toString().split("=")[1].trim();
@@ -59,7 +61,10 @@ public class LimitMatlab {
 		try {
 			eng.eval("syms x h;", null, null);
 			eng.eval("f = " + op, null, null);
-			eng.eval("double(limit(f,x," + value + ",'right'))", writer, null);
+			if (!value.equals(Double.POSITIVE_INFINITY) && !value.equals(Double.NEGATIVE_INFINITY))
+				eng.eval("double(limit(f,x," + value + ",'right'))", writer, null);
+			else
+				throw new IllegalStateException("Could not evaluate right hand limit for INF value");
 		}
 		catch (Exception e) {System.err.println("Matlab error:\n"); e.printStackTrace(); } 
 		String result = writer.toString().split("=")[1].trim();
@@ -74,6 +79,37 @@ public class LimitMatlab {
 	}
 	
 	public Double getLimit(){
+		if (value.equals(Double.POSITIVE_INFINITY)){
+			StringWriter writer = new StringWriter();
+			try {
+				eng.eval("syms x h;", null, null);
+				eng.eval("f = " + op, null, null);
+				eng.eval("double(limit(f,x,Inf))", writer, null);
+				String result = writer.toString().split("=")[1].trim();
+				if (result.equals("Inf") || result.equals("-Inf"))
+					return Double.POSITIVE_INFINITY;
+			else
+				return Double.valueOf(result);
+			}
+			catch (Exception e) {}
+		}
+		else if (value.equals(Double.NEGATIVE_INFINITY)){
+			StringWriter writer = new StringWriter();
+			try {
+				eng.eval("syms x h;", null, null);
+				eng.eval("f = " + op, null, null);
+				eng.eval("double(limit(f,x,-Inf))", writer, null);
+				String result = writer.toString().split("=")[1].trim();
+				if (result.equals("Inf"))
+					return Double.POSITIVE_INFINITY;
+				else if (result.equals("-Inf"))
+					return Double.NEGATIVE_INFINITY;
+			else
+				return Double.valueOf(result);
+			}
+			catch (Exception e) {}
+		}
+		
 		if (!exists())
 			throw new IllegalStateException("Limit does not exist");
 		
@@ -82,9 +118,5 @@ public class LimitMatlab {
 
 	public void close() throws EngineException {
 		eng.close();
-	}
-	
-	public boolean isReady(){
-		return ready;
 	}
 }

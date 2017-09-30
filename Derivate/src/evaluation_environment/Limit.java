@@ -2,11 +2,12 @@ package evaluation_environment;
 
 import ast.Operation;
 
-public class Limit {
+public class Limit implements LimitInterface {
 
 	private Operation op;
 	private Double value;
 	private final int PRECISION = 8;
+	private final double SCRAP = 0.01;
 	
 	public Limit(Operation op, Double value)
 	{
@@ -58,7 +59,7 @@ public class Limit {
 	}
 	
 	public boolean exists() {
-		return (Math.round(leftLimit()) == Math.round(rightLimit()));
+		return (Math.abs(Math.abs(leftLimit()) - Math.abs(rightLimit())) < SCRAP);
 	}
 	
 	public Double getLimit(){

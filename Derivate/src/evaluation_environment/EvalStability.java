@@ -28,26 +28,30 @@ public class EvalStability {
 		df.setRoundingMode(RoundingMode.CEILING);
 	}
 	
-	public void eval() throws EngineException{
+	public void eval(boolean matlab) throws EngineException{
 		Iterator <Edge> it = graph.getEdgeIterator();
-		LimitMatlab l = new LimitMatlab();
+		LimitInterface l = null;
+		
+		if(matlab) l = new LimitMatlab();
 		
 		while (it.hasNext()){
 			Edge e = it.next();
 			Operation op = e.getAttribute("Operation");
-			System.out.println("OP: " + op.toString());
+			System.out.print("OP: " + op.toString() + ": ");
 			
-			//if (op != null && e.getTargetNode().getAttribute("ui.color") != null && e.getTargetNode().getAttribute("ui.color") == Color.RED)
-				//continue;
+			if (op != null && e.getTargetNode().getAttribute("ui.color") != null && e.getTargetNode().getAttribute("ui.color") == Color.RED)
+				continue;
 			
 			if (op != null){
-				//Limit l = new Limit(op, val);
-				l.setValue(op, val);
-				if (l.exists()){
+				if (!matlab) l = new Limit(op, val);
+				else
+					((LimitMatlab) l).setValue(op, val);
+				if (val.isInfinite() || l.exists()){
 					double limitVal = l.getLimit();
+					System.out.println(limitVal);
 					Node target = e.getTargetNode();
 					
-					if ((int) limitVal == Integer.MAX_VALUE)
+					if ((int)Math.abs(limitVal) == Integer.MAX_VALUE)
 					{
 						e.addAttribute("ui.style", "fill-color: red;");
 						target.setAttribute("ui.color", Color.RED);
@@ -69,7 +73,8 @@ public class EvalStability {
 			}
 		}
 		
-		l.close();
+		if (matlab)
+			((LimitMatlab)l).close();
 	}
 	
 	public Double getVal(){

@@ -22,20 +22,20 @@ public class Launcher {
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 	}
 	
-	private static void numericalStabilityTest(String operation, Double val) throws TokenizerException, EngineException, InterruptedException{
+	private static void numericalStabilityTest(String operation, Double val, boolean matlab) throws TokenizerException, EngineException, InterruptedException{
 		AbstractTreeBuilder treeGenerator = new AbstractTreeBuilder(operation);
 		Operation tree = treeGenerator.getTree();
 		GraphComputation comp = new GraphComputation(graph);
 		try { tree.accept(comp); } catch (Exception e) { e.printStackTrace(); }
 		graph.display();
 		EvalStability eval = new EvalStability(graph, val);
-		eval.eval();
+		eval.eval(matlab);
 		for (Operation op : eval.getUnstable())
 			System.err.println(op.toString());
 	}
 	
-	public void launch(String input, Double val) throws TokenizerException, InterruptedException, EngineException, IOException {
-		numericalStabilityTest(input, val);
+	public void launch(String input, Double val, boolean matlab) throws TokenizerException, InterruptedException, EngineException, IOException {
+		numericalStabilityTest(input, val, matlab);
 	}
 	
 	public static void main(String[] args) throws InterruptedException{

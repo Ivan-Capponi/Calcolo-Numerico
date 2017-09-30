@@ -221,13 +221,27 @@ public class Gui extends JFrame {
 				{
 					Double val = null;
 					try {
-						val = Double.valueOf(textField_1.getText());
+						if (textField_1.isEnabled())
+							val = Double.valueOf(textField_1.getText());
 					}
 					catch(NumberFormatException exception) { return; }
 					thisOne.dispose();
 					BackgroundWorker bw = null;
 					if (rdbtnASpecificPoint.isSelected())
-						bw = new BackgroundWorker(new Launcher(), textField.getText(), val);
+						if (rdbtnSoftwareEmbeddedfaster.isSelected())
+							bw = new BackgroundWorker(new Launcher(), textField.getText(), val, false);
+						else
+							bw = new BackgroundWorker(new Launcher(), textField.getText(), val, true);
+					else if (rdbtnPositiveInfinity.isSelected())
+						if (rdbtnSoftwareEmbeddedfaster.isSelected())
+							bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.POSITIVE_INFINITY, false);
+						else
+							bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.POSITIVE_INFINITY, true);
+					else if (rdbtnNegativeInfinity.isSelected())
+								if (rdbtnSoftwareEmbeddedfaster.isSelected())
+									bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.NEGATIVE_INFINITY, false);
+								else
+									bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.NEGATIVE_INFINITY, true);
 					bw.execute();
 				}
 			}
