@@ -19,6 +19,10 @@ public class BackgroundWorker extends SwingWorker<String, String> {
 	}
 	@Override
 	protected String doInBackground() throws Exception {
+		GraphViewer graphViewer = new GraphViewer(l.getGraph());
+		ToolBox tool = new ToolBox();
+		tool.setVisible(true);
+		graphViewer.setVisible(true);
 		l.launch(s, val, matlab);
 		return null;
 	}

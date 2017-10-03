@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -63,10 +62,7 @@ public class Gui extends JFrame {
 		gbc_lblInputAFunction.gridx = 2;
 		gbc_lblInputAFunction.gridy = 1;
 		contentPane.add(lblInputAFunction, gbc_lblInputAFunction);
-		
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-		
+		this.setLocationRelativeTo(null);
 		JLabel lblFx = new JLabel("f(x) = ");
 		lblFx.setFont(new Font("Cambria Math", Font.PLAIN, 13));
 		GridBagConstraints gbc_lblFx = new GridBagConstraints();
@@ -212,6 +208,15 @@ public class Gui extends JFrame {
 		gbc_btnAnalyze.gridy = 9;
 		contentPane.add(btnAnalyze, gbc_btnAnalyze);
 		Gui thisOne = this;
+		
+		try {
+			String value = WinRegistry.readString (WinRegistry.HKEY_LOCAL_MACHINE,"SOFTWARE\\MathWorks\\MATLAB\\9.3", "MATLABROOT");
+			if (value == null || (!value.contains("R2017b") && !value.contains("R2016b") ))
+				rdbtnMatlabEngine.setEnabled(false);
+		} catch (Exception e) {
+			rdbtnMatlabEngine.setEnabled(false);
+		}
+		
 		btnAnalyze.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {

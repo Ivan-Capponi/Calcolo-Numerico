@@ -17,11 +17,11 @@ public class LimitMatlab implements LimitInterface{
 		if (op == null || value == null) throw new IllegalArgumentException("Invalid operation or tending value");
 		this.op = op;
 		this.value = value;
-		try { eng = MatlabEngine.startMatlab(); } catch (Exception e) { e.printStackTrace(); }
+		try { eng = MatlabEngine.startMatlab(); eng.eval("syms x h;", null, null); } catch (Exception e) { e.printStackTrace(); }
 	}
 	
 	public LimitMatlab() {
-		try { eng = MatlabEngine.startMatlab(); } catch (Exception e) { e.printStackTrace(); }
+		try { eng = MatlabEngine.startMatlab(); eng.eval("syms x h;", null, null); } catch (Exception e) { e.printStackTrace(); }
 	}
 	
 	public void setValue(Operation op, Double value){
@@ -41,7 +41,6 @@ public class LimitMatlab implements LimitInterface{
 	public Double leftLimit(){
 		StringWriter writer = new StringWriter();
 		try {
-			eng.eval("syms x h;", null, null);
 			eng.eval("f = " + op, null, null);
 			if (!value.equals(Double.POSITIVE_INFINITY) && !value.equals(Double.NEGATIVE_INFINITY))
 				eng.eval("double(limit(f,x," + value + ",'left'))", writer, null);
@@ -59,7 +58,6 @@ public class LimitMatlab implements LimitInterface{
 	public Double rightLimit(){
 		StringWriter writer = new StringWriter();
 		try {
-			eng.eval("syms x h;", null, null);
 			eng.eval("f = " + op, null, null);
 			if (!value.equals(Double.POSITIVE_INFINITY) && !value.equals(Double.NEGATIVE_INFINITY))
 				eng.eval("double(limit(f,x," + value + ",'right'))", writer, null);
@@ -96,7 +94,6 @@ public class LimitMatlab implements LimitInterface{
 		else if (value.equals(Double.NEGATIVE_INFINITY)){
 			StringWriter writer = new StringWriter();
 			try {
-				eng.eval("syms x h;", null, null);
 				eng.eval("f = " + op, null, null);
 				eng.eval("double(limit(f,x,-Inf))", writer, null);
 				String result = writer.toString().split("=")[1].trim();

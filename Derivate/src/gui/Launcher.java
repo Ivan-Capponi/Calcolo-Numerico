@@ -27,7 +27,6 @@ public class Launcher {
 		Operation tree = treeGenerator.getTree();
 		GraphComputation comp = new GraphComputation(graph);
 		try { tree.accept(comp); } catch (Exception e) { e.printStackTrace(); }
-		graph.display();
 		EvalStability eval = new EvalStability(graph, val);
 		eval.eval(matlab);
 		for (Operation op : eval.getUnstable())
@@ -40,7 +39,11 @@ public class Launcher {
 	
 	public static void main(String[] args) throws InterruptedException{
 		Gui frame = new Gui();
-		frame.setVisible(true);	
+		frame.setVisible(true);
+	}
+
+	public Graph getGraph() {
+		return graph;
 	}
 
 }

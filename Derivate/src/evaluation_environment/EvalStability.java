@@ -39,9 +39,6 @@ public class EvalStability {
 			Operation op = e.getAttribute("Operation");
 			System.out.print("OP: " + op.toString() + ": ");
 			
-			if (op != null && e.getTargetNode().getAttribute("ui.color") != null && e.getTargetNode().getAttribute("ui.color") == Color.RED)
-				continue;
-			
 			if (op != null){
 				if (!matlab) l = new Limit(op, val);
 				else
