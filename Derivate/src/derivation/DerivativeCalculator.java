@@ -2,7 +2,7 @@ package derivation;
 
 import ast.*;
 
-public class DerivateComputation implements Visitor<Operation> {
+public class DerivativeCalculator implements Visitor<Operation> {
 
 	@Override
 	public Operation visitAdd(Operation left, Operation right) {

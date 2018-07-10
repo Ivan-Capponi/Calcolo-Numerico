@@ -3,6 +3,9 @@ package gui;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.mathworks.engine.MatlabEngine;
+
 import java.awt.Toolkit;
 import javax.swing.JRadioButton;
 import java.awt.GridBagLayout;
@@ -14,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.Future;
 
 public class Gui extends JFrame {
 	private static final long serialVersionUID = -7164912363050202532L;
@@ -22,6 +26,7 @@ public class Gui extends JFrame {
 	private final JButton btnAnalyze = new JButton("Analyze");
 	public boolean READY = false;
 	private JTextField textField_1;
+	private Future<MatlabEngine> eng;
 
 	/**
 	 * Create the frame.
@@ -52,7 +57,7 @@ public class Gui extends JFrame {
 		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
-		
+		eng = MatlabEngine.startMatlabAsync();
 		JLabel lblInputAFunction = new JLabel("Input a function to analyze");
 		JLabel label_1 = new JLabel("At:");
 		lblInputAFunction.setFont(new Font("Cambria Math", Font.BOLD, 25));
@@ -210,8 +215,8 @@ public class Gui extends JFrame {
 		Gui thisOne = this;
 		
 		try {
-			String value = WinRegistry.readString (WinRegistry.HKEY_LOCAL_MACHINE,"SOFTWARE\\MathWorks\\MATLAB\\9.3", "MATLABROOT");
-			if (value == null || (!value.contains("R2017b") && !value.contains("R2016b") ))
+			String value = WinRegistry.readString (WinRegistry.HKEY_LOCAL_MACHINE,"SOFTWARE\\MathWorks\\MATLAB\\9.4", "MATLABROOT");
+			if (value == null || (!value.contains("R2017b") && !value.contains("R2016b") && !value.contains("R2018a")))
 				rdbtnMatlabEngine.setEnabled(false);
 		} catch (Exception e) {
 			rdbtnMatlabEngine.setEnabled(false);
@@ -234,19 +239,19 @@ public class Gui extends JFrame {
 					BackgroundWorker bw = null;
 					if (rdbtnASpecificPoint.isSelected())
 						if (rdbtnSoftwareEmbeddedfaster.isSelected())
-							bw = new BackgroundWorker(new Launcher(), textField.getText(), val, false);
+							bw = new BackgroundWorker(new Launcher(), textField.getText(), val, false, eng);
 						else
-							bw = new BackgroundWorker(new Launcher(), textField.getText(), val, true);
+							bw = new BackgroundWorker(new Launcher(), textField.getText(), val, true, eng);
 					else if (rdbtnPositiveInfinity.isSelected())
 						if (rdbtnSoftwareEmbeddedfaster.isSelected())
-							bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.POSITIVE_INFINITY, false);
+							bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.POSITIVE_INFINITY, false, eng);
 						else
-							bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.POSITIVE_INFINITY, true);
+							bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.POSITIVE_INFINITY, true, eng);
 					else if (rdbtnNegativeInfinity.isSelected())
 								if (rdbtnSoftwareEmbeddedfaster.isSelected())
-									bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.NEGATIVE_INFINITY, false);
+									bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.NEGATIVE_INFINITY, false, eng);
 								else
-									bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.NEGATIVE_INFINITY, true);
+									bw = new BackgroundWorker(new Launcher(), textField.getText(), Double.NEGATIVE_INFINITY, true, eng);
 					bw.execute();
 				}
 			}

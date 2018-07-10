@@ -40,6 +40,8 @@ public class AbstractTreeBuilder {
 			case "tan": return new Tan(getTree());
 			case "exp": return new Exp(getTree());
 			case "abs": return new Abs(getTree());
+			case "sinh":return new SinH(getTree());
+			case "cosh":return new CosH(getTree());
 			default: throw new TokenizerException("Function error");
 		}
 	}

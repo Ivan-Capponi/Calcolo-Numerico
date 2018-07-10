@@ -1,27 +1,27 @@
 package evaluation_environment;
 
 import java.io.StringWriter;
-
 import com.mathworks.engine.EngineException;
 import com.mathworks.engine.MatlabEngine;
-
 import ast.Operation;
+import tokenizer.AbstractTreeBuilder;
+import tokenizer.TokenizerException;
 
 public class LimitMatlab implements LimitInterface{
 	private Operation op;
 	private Double value;
 	private MatlabEngine eng;
 	
-	public LimitMatlab(Operation op, Double value)
+	public LimitMatlab(Operation op, Double value, MatlabEngine eng)
 	{
 		if (op == null || value == null) throw new IllegalArgumentException("Invalid operation or tending value");
 		this.op = op;
 		this.value = value;
-		try { eng = MatlabEngine.startMatlab(); eng.eval("syms x h;", null, null); } catch (Exception e) { e.printStackTrace(); }
+		try { this.eng = eng; eng.eval("syms x h;", null, null); } catch (Exception e) { e.printStackTrace(); }
 	}
 	
-	public LimitMatlab() {
-		try { eng = MatlabEngine.startMatlab(); eng.eval("syms x h;", null, null); } catch (Exception e) { e.printStackTrace(); }
+	public LimitMatlab(MatlabEngine eng) {
+		try { this.eng = eng; eng.eval("syms x h;", null, null); } catch (Exception e) { e.printStackTrace(); }
 	}
 	
 	public void setValue(Operation op, Double value){
@@ -115,5 +115,14 @@ public class LimitMatlab implements LimitInterface{
 
 	public void close() throws EngineException {
 		eng.close();
+	}
+	
+	public static void main(String[] args) throws TokenizerException {
+		AbstractTreeBuilder esp = new AbstractTreeBuilder("(sin(x^2)+log(x^2)+x)/(log(exp(x^2)+1)+sqrt(x+3)-5)");
+		Operation op = esp.getTree();
+		Limit lim = new Limit(op, Double.POSITIVE_INFINITY);
+		//LimitMatlab lim2 = new LimitMatlab(op, Double.POSITIVE_INFINITY);
+		System.out.println(lim.getLimit());
+		//System.out.println(lim2.getLimit());
 	}
 }

@@ -8,13 +8,13 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
 import ast.*;
-import derivation.DerivateComputation;
+import derivation.DerivativeCalculator;
 import derivation.Visitor;
 
 public class GraphComputation implements Visitor <Operation> {
 
 	private Graph graph;
-	private DerivateComputation derivation = new DerivateComputation();
+	private DerivativeCalculator derivation = new DerivativeCalculator();
 	private SimpleVar x = new SimpleVar();
 	private AtomicInteger id = new AtomicInteger(0);
 	

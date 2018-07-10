@@ -2,8 +2,8 @@ package evaluation_environment;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
-
 import com.mathworks.engine.EngineException;
+import com.mathworks.engine.MatlabEngine;
 
 import ast.Operation;
 import org.graphstream.graph.Edge;
@@ -28,11 +28,14 @@ public class EvalStability {
 		df.setRoundingMode(RoundingMode.CEILING);
 	}
 	
-	public void eval(boolean matlab) throws EngineException{
+	public void eval(boolean matlab, MatlabEngine eng) throws EngineException, IllegalArgumentException, IllegalStateException, InterruptedException{
 		Iterator <Edge> it = graph.getEdgeIterator();
 		LimitInterface l = null;
 		
-		if(matlab) l = new LimitMatlab();
+		if(matlab && eng != null) { 
+			l = new LimitMatlab(eng);
+			
+		}
 		
 		while (it.hasNext()){
 			Edge e = it.next();
@@ -41,8 +44,9 @@ public class EvalStability {
 			
 			if (op != null){
 				if (!matlab) l = new Limit(op, val);
-				else
+				else {
 					((LimitMatlab) l).setValue(op, val);
+				}
 				if (val.isInfinite() || l.exists()){
 					double limitVal = l.getLimit();
 					System.out.println(limitVal);

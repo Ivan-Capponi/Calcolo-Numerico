@@ -63,9 +63,42 @@ public class Limit implements LimitInterface {
 	}
 	
 	public Double getLimit(){
+		if (value.equals(Double.POSITIVE_INFINITY))
+			return getPositiveInf();
+		if (value.equals(Double.NEGATIVE_INFINITY))
+			return getNegativeInf();
 		if (!exists())
 			throw new IllegalStateException("Limit does not exist");
 		
 		return (leftLimit() + rightLimit())/2;
+	}
+
+	private Double getNegativeInf() {
+		double incrementalValue = 1.0;
+		double returnValue = 0;
+		for (int i = 0; i < PRECISION; i++, incrementalValue++) {
+			try
+			{
+				returnValue = op.getNumericResult(-incrementalValue * Math.pow(10, incrementalValue));				
+			}
+			catch (Exception e) { break; }
+		}
+		
+		return returnValue;
+	}
+
+	private Double getPositiveInf() {
+		double incrementalValue = 1.0;
+		double returnValue = 0;
+		for (int i = 0; i < PRECISION; i++, incrementalValue++) {
+			try
+			{
+				returnValue = op.getNumericResult(incrementalValue * Math.pow(10, incrementalValue));
+				
+			}
+			catch (Exception e) { break; }
+		}
+		
+		return returnValue;
 	}
 }
